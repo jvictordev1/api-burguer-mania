@@ -16,8 +16,8 @@ public class CategoryController : ControllerBase {
     [HttpGet("all")]
     public async Task<ActionResult<List<Category>>> GetAllCategories() {
         var categories = await _context.Categories.ToListAsync();
-        if (categories is null) {
-            return NotFound("There isn't any categories created.");
+        if (categories is null || !categories.Any()) {
+            return NotFound(new {message = "There isn't any categories created."});
         }
         return Ok(categories);
     }
@@ -53,7 +53,7 @@ public class CategoryController : ControllerBase {
         if (category is null) {
             return NotFound(new {message = "Couldn't find a category with the respective id."});
         }
-        if (await _context.Categories.AnyAsync(c => c.Name == newCategory.Name && c.Id == id)) {
+        if (await _context.Categories.AnyAsync(c => c.Name == newCategory.Name && c.Id != id)) {
             return BadRequest(new {message = "There's already a category with the provided name."});
         }
         category.Description = newCategory.Description;

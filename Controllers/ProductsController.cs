@@ -29,6 +29,22 @@ public class ProductsController : ControllerBase {
         }
         return Ok(product);
     }
+    [HttpGet("GetAllProductsByCategory/{categoryId:int}")]
+    public async Task<ActionResult<Product>> GetAllProductsByCategory(int categoryId) {
+        var products = await _context.Products.Where(p => p.CategoryId == categoryId).ToListAsync();
+        if (products is null || !products.Any()) {
+            return NotFound(new {message = "There isn't any products in this category"});
+        }
+        return Ok(products);
+    }
+    [HttpGet("GetProductByName/{name}")]
+    public async Task<ActionResult<Product>> GetProductByName(string name) {
+        var product = await _context.Products.Where(p => p.Name == name).FirstOrDefaultAsync();
+        if (product is null) {
+            return NotFound(new {message = "Couldn't find a product with the provided name."});
+        }
+        return product;
+    }
     [HttpPost("create")]
     public async Task<IActionResult> CreateProduct(ProductDTO product) {
         if (product is null) {

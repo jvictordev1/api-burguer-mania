@@ -6,4 +6,5 @@ public class OrderProduct {
     public Order? Order { get; set; }
     public required int ProductId { get; set; }
     public Product? Product { get; set; }
+    public required int Amount {get; set;}
 }

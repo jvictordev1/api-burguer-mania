@@ -13,8 +13,16 @@ builder.Services.AddSwaggerGen();
 
 string pgConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
 builder.Services.AddDbContext<BurguerManiaDbContext>(o => o.UseNpgsql(pgConnectionString));
+builder.Services.AddCors(options => {
+    options.AddPolicy("CorsPolicy",
+        builder => builder
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .SetIsOriginAllowed((host) => true)
+        .AllowAnyHeader());
+});
 var app = builder.Build();
-
+app.UseCors("CorsPolicy");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

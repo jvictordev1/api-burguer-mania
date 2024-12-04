@@ -44,12 +44,40 @@ public class OrdersController : ControllerBase {
             return BadRequest(new { message = "The status id doesn't exist, please provide a valid status id." });
         }
 
+        var user = await _context.Users.FindAsync(orderDto.UserId);
+        if (user is null) {
+            return BadRequest(new { message = "The user doesn't exist, please provide a existent user." });
+        }
+
         var newOrder = new Order {
             Value = orderDto.Value,
             StatusId = orderDto.StatusId,
+            Description = orderDto.Description
         };
-
         _context.Orders.Add(newOrder);
+        try {
+            await _context.SaveChangesAsync();
+        } catch (DbUpdateException) {
+            return StatusCode(500, new { message = "Internal error while trying to create the order." });
+        }
+        var newOrderUser = new OrderUser {
+            OrderId = newOrder.Id,
+            UserId = user.Id
+        };
+        _context.OrdersUsers.Add(newOrderUser);
+        foreach (var product in orderDto.Products) {
+            var productExists = await _context.Products.AnyAsync(p => p.Id == product.Id);
+            if (productExists) {
+                var newOrderProduct = new OrderProduct {
+                    Amount = product.Amount,
+                    OrderId = newOrder.Id,
+                    ProductId = product.Id
+                };
+                _context.OrdersProducts.Add(newOrderProduct);
+            } else {
+                return BadRequest(new {message = "The provided product doesn't exist."});
+            }
+        }
         try {
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetOrderById), new { id = newOrder.Id }, newOrder);
@@ -72,6 +100,7 @@ public class OrdersController : ControllerBase {
 
         order.Value = updatedOrderDto.Value;
         order.StatusId = updatedOrderDto.StatusId;
+        order.Description = updatedOrderDto.Description;
 
         try {
             await _context.SaveChangesAsync();
