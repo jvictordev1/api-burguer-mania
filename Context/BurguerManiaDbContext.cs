@@ -16,4 +16,6 @@ public class BurguerManiaDbContext : DbContext {
     public DbSet<Status> Status {get; set;}
 
     public DbSet<Order> Orders {get; set;}
+    public DbSet<OrderProduct> OrdersProducts {get; set;}
+    public DbSet<OrderUser> OrdersUsers {get; set;}
 }
