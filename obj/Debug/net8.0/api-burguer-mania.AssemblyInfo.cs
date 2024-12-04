@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("api-burguer-mania")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5c995024a51e5716c57deffd676d9e13a2f2db2f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+104918cdfa363ce640de1b6ecf29c1581b23ea4d")]
 [assembly: System.Reflection.AssemblyProductAttribute("api-burguer-mania")]
 [assembly: System.Reflection.AssemblyTitleAttribute("api-burguer-mania")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
